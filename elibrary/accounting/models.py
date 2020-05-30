@@ -8,9 +8,11 @@ class Author(models.Model):
     author_surname = models.CharField(max_length=100)
 
     def __str__(self):
-        name_surname = [self.author_name, self.author_surname]
-        name_surname = " ".join(name_surname)
+        name_surname = str(self.author_name) + " " + str(self.author_surname)
         return name_surname
+
+    class Meta:
+        verbose_name_plural = '1. Authors'    # number is used for custom ordering in the admin page
 
 
 class FictionBook(models.Model):
@@ -20,6 +22,9 @@ class FictionBook(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = '2. Fiction books'
 
 
 class ScienceBook(models.Model):
@@ -33,6 +38,9 @@ class ScienceBook(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = '3. Science books'
 
 
 class Article(models.Model):
@@ -49,6 +57,9 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = '4. Articles'
 
 
 class LibraryUnit(models.Model):
@@ -74,19 +85,31 @@ class LibraryUserInfo(models.Model):
     def __str__(self):
         return self.library_user.__str__()
 
+    class Meta:
+        verbose_name_plural = '5. Library user info'
+
 
 class LibraryUserAddress(models.Model):
     library_user_info = models.OneToOneField(LibraryUserInfo, on_delete=models.CASCADE)
     building_number = models.PositiveSmallIntegerField()
     apartment_number = models.PositiveSmallIntegerField()
 
+    class Meta:
+        verbose_name_plural = '6. Library user addresses'
+
 
 class CitiesList(models.Model):
     city_info = models.OneToOneField(LibraryUserAddress, on_delete=models.CASCADE)
     city_name = models.CharField(max_length=200)
 
+    class Meta:
+        verbose_name_plural = '7. Cities list'
+
 
 class StreetsList(models.Model):
     street_info = models.OneToOneField(LibraryUserAddress, on_delete=models.CASCADE)
     street_name = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name_plural = '8. Streets list'
 
