@@ -55,7 +55,7 @@ ROOT_URLCONF = 'elibrary.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],    # add 'templates' dir in the prj root for checking
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
