@@ -20,7 +20,7 @@ def signup(request):
             user.save()
             current_site = get_current_site(request)
             mail_subject = 'Account activation.'
-            message = render_to_string('account_activation_email.html', {
+            message = render_to_string('registration/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -32,7 +32,7 @@ def signup(request):
             return HttpResponse('Confirm your email address to finalize registration process, please!')
     else:
         form = SignupForm()
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'registration/signup.html', {'form': form})
 
 
 def activate(request, uidb64, token):
@@ -45,6 +45,6 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return HttpResponse('Thank you for registration and email confirmation!')
+        return redirect('login')
     else:
         return HttpResponse('Invalid activation link!')
