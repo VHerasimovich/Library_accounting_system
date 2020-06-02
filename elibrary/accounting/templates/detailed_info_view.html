@@ -1,0 +1,70 @@
+{% block content %}
+
+
+<table border="1" width="100%">
+    {% if all_articles is not None %}
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Journal</th>
+            <th>Impact Factor</th>
+            <th>Volume</th>
+            <th>Article number</th>
+            <th>Pages</th>
+            <th>Publishing year</th>
+            <th>DOI</th>
+        </tr>
+        {% for current_article in all_articles %}
+            <tr>
+                <td>{{ current_article.title }}</td>
+                <td>{% for current_author in current_article.work_author.all %}
+                        {{current_author}}<br>
+                    {% endfor %}</td>
+                <td>{{ current_article.journal }}</td>
+                <td>{{ current_article.impact_factor }}</td>
+                <td>{{ current_article.volume }}</td>
+                <td>{{ current_article.article_number }}</td>
+                <td>{{ current_article.pages }}</td>
+                <td>{{ current_article.publishing_year }}</td>
+                <td>{{ current_article.doi }}</td>
+            </tr>
+        {% endfor %}
+    {% elif all_fiction_books is not None %}
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+        </tr>
+        {% for current_fiction_books in all_fiction_books %}
+            <tr>
+                <td>{{ current_fiction_books.title }}</td>
+                <td>{% for current_author in current_fiction_books.work_author.all %}
+                        {{current_author}}<br>
+                    {% endfor %}</td>
+            </tr>
+        {% endfor %}
+    {% elif all_science_books is not None %}
+         <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Publisher</th>
+            <th>Edition</th>
+            <th>Publishing year</th>
+            <th>isbn</th>
+        </tr>
+        {% for current_science_books in all_science_books %}
+            <tr>
+                <td>{{ current_science_books.title }}</td>
+                <td>{% for current_author in current_science_books.work_author.all %}
+                        {{current_author}}<br>
+                    {% endfor %}</td>
+                <td>{{ current_science_books.publisher }}</td>
+                <td>{{ current_science_books.edition }}</td>
+                <td>{{ current_science_books.publishing_year }}</td>
+                <td>{{ current_science_books.isbn }}</td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+
+</table>
+
+{% endblock %}

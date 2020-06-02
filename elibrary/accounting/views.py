@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
 from .forms import SignupForm
+from .models import *
 
 
 def signup(request):
@@ -54,3 +55,18 @@ def activate(request, uidb64, token):
 @login_required
 def profile_detail(request):
     return render(request, 'test_profile_details.html')
+
+
+@login_required
+def detailed_library_unit_info(request, unit_type):
+    all_articles = all_science_books = all_fiction_books = None
+    if unit_type == 1:
+        all_articles = Article.objects.all()
+    elif unit_type == 2:
+        all_science_books = ScienceBook.objects.all()
+    elif unit_type == 3:
+        all_fiction_books = FictionBook.objects.all()
+
+    return render(request, 'detailed_info_view.html', {'all_articles': all_articles,
+                                                       'all_science_books': all_science_books,
+                                                       'all_fiction_books': all_fiction_books})

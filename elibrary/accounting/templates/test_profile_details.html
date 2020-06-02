@@ -3,3 +3,11 @@ Profile for the user "{{ request.user }}" view after login.
 <br>
 <br>
 <a href="{% url "logout" %}">Logout</a>
+
+
+<p><a href="{% url 'detailed_info' 1 %}">Articles</a></p>
+<p><a href="{% url 'detailed_info' 2 %}">Science Books</a></p>
+<p><a href="{% url 'detailed_info' 3 %}">Fiction Books</a></p>
+
+
+
