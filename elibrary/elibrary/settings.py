@@ -126,6 +126,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = 'test_profile_details'
+LOGIN_REDIRECT_URL = 'profile_details'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
