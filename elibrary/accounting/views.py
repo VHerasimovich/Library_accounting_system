@@ -23,9 +23,15 @@ def signup(request):
             user_info = LibraryUserInfo(library_user=user,
                                         phone_number=form.cleaned_data.get('phone_number'))
             user_info.save()
+            if form.cleaned_data.get('pick_city'):
+                current_city = CitiesList.objects.get(city_name=form.cleaned_data.get('pick_city'))
+            else:
+                current_city = form.cleaned_data.get('add_city')
+                new_city = CitiesList(city_name=form.cleaned_data.get('add_city'))
+                new_city.save()
             user_address = LibraryUserAddress(library_user=LibraryUserInfo.objects.get(library_user=user),
-                                              city_name=CitiesList.objects.get(city_name=form.cleaned_data.get('user_city')),
-                                              street_name=StreetsList.objects.get(street_name=form.cleaned_data.get('user_street')),
+                                              city_name=current_city,
+                                              street_name=StreetsList.objects.get(street_name=form.cleaned_data.get('pick_street')),
                                               building_number=form.cleaned_data.get('user_building_number'),
                                               apartment_number=form.cleaned_data.get('user_apartment_number'))
             user_address.save()
