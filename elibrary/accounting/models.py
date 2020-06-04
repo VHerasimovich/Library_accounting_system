@@ -89,27 +89,32 @@ class LibraryUserInfo(models.Model):
         verbose_name_plural = '5. Library user info'
 
 
-class LibraryUserAddress(models.Model):
-    library_user_info = models.OneToOneField(LibraryUserInfo, on_delete=models.CASCADE)
-    building_number = models.PositiveSmallIntegerField()
-    apartment_number = models.PositiveSmallIntegerField()
-
-    class Meta:
-        verbose_name_plural = '6. Library user addresses'
-
-
 class CitiesList(models.Model):
-    city_info = models.OneToOneField(LibraryUserAddress, on_delete=models.CASCADE)
     city_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.city_name
 
     class Meta:
         verbose_name_plural = '7. Cities list'
 
 
 class StreetsList(models.Model):
-    street_info = models.OneToOneField(LibraryUserAddress, on_delete=models.CASCADE)
     street_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.street_name
 
     class Meta:
         verbose_name_plural = '8. Streets list'
 
+
+class LibraryUserAddress(models.Model):
+    library_user = models.OneToOneField(LibraryUserInfo, on_delete=models.CASCADE)
+    building_number = models.PositiveSmallIntegerField()
+    apartment_number = models.PositiveSmallIntegerField()
+    city_name = models.ForeignKey(CitiesList, null=True, on_delete=models.CASCADE)
+    street_name = models.ForeignKey(StreetsList, null=True, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = '6. Library user addresses'

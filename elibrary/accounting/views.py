@@ -14,8 +14,6 @@ from .models import *
 
 
 def signup(request):
-    form = SignupForm(request)
-    print(form.fields['phone_number'])
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
