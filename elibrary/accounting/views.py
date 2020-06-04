@@ -18,10 +18,17 @@ def signup(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user_info = LibraryUserInfo(library_user=user, phone_number=form.cleaned_data.get('phone_number'))
             user.is_active = False    # non active user, i.e. user without email confirmation can't login
             user.save()
+            user_info = LibraryUserInfo(library_user=user,
+                                        phone_number=form.cleaned_data.get('phone_number'))
             user_info.save()
+            user_address = LibraryUserAddress(library_user=LibraryUserInfo.objects.get(library_user=user),
+                                              city_name=CitiesList.objects.get(city_name=form.cleaned_data.get('user_city')),
+                                              street_name=StreetsList.objects.get(street_name=form.cleaned_data.get('user_street')),
+                                              building_number=form.cleaned_data.get('user_building_number'),
+                                              apartment_number=form.cleaned_data.get('user_apartment_number'))
+            user_address.save()
             current_site = get_current_site(request)
             mail_subject = 'Account activation.'
             message = render_to_string('registration/account_activation_email.html', {
@@ -63,10 +70,17 @@ def profile_detail(request):
         user_info = None
         print("No info for user "+str(user))
 
-    if user_info:
-        print(user_info.phone_number)
+    try:
+        user_address = LibraryUserAddress.objects.get(library_user=user_info)
+    except:
+        user_address = None
+        print("No address info for user "+str(user_info.library_user))
 
-    return render(request, 'profile_details.html', {'user_info': user_info})
+    if user_address:
+        print(user_address.city_name)
+
+    return render(request, 'profile_details.html', {'user_info': user_info,
+                                                    'user_address': user_address})
 
 
 @login_required

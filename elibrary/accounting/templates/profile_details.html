@@ -5,7 +5,9 @@ User "{{ request.user }}" profile view.
 <br>
 <p> User email: {{request.user.email}}</p>
 <p> User phone number: {{user_info.phone_number}}</p>
-<p> User address: </p>
+<p> User address: {{user_address.city_name}},
+                  {{user_address.street_name}} street,
+                  {{user_address.building_number}}-{{user_address.apartment_number}} </p>
 <br>
 
 <br>
