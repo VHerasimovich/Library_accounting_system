@@ -13,7 +13,7 @@ urlpatterns = [
     path('test_profile_details/',
          views.profile_detail,
          name='test_profile_details'),
-    path('detailed_info/<int:unit_type>/',
+    path('detailed_info/<str:unit_type>/',
          views.detailed_library_unit_info,
          name='detailed_info'),
 ]

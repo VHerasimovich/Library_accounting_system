@@ -5,9 +5,9 @@ Profile for the user "{{ request.user }}" view after login.
 <a href="{% url "logout" %}">Logout</a>
 
 
-<p><a href="{% url 'detailed_info' 1 %}">Articles</a></p>
-<p><a href="{% url 'detailed_info' 2 %}">Science Books</a></p>
-<p><a href="{% url 'detailed_info' 3 %}">Fiction Books</a></p>
+<p><a href="{% url 'detailed_info' 'articles' %}">Articles</a></p>
+<p><a href="{% url 'detailed_info' 'science_books' %}">Science Books</a></p>
+<p><a href="{% url 'detailed_info' 'fiction_books' %}">Fiction Books</a></p>
 
 
 
