@@ -14,12 +14,16 @@ from .models import *
 
 
 def signup(request):
+    form = SignupForm(request)
+    print(form.fields['phone_number'])
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            user_info = LibraryUserInfo(library_user=user, phone_number=form.cleaned_data.get('phone_number'))
             user.is_active = False    # non active user, i.e. user without email confirmation can't login
             user.save()
+            user_info.save()
             current_site = get_current_site(request)
             mail_subject = 'Account activation.'
             message = render_to_string('registration/account_activation_email.html', {
@@ -54,7 +58,17 @@ def activate(request, uidb64, token):
 
 @login_required
 def profile_detail(request):
-    return render(request, 'test_profile_details.html')
+    user = request.user
+    try:
+        user_info = LibraryUserInfo.objects.get(library_user=user)
+    except:
+        user_info = None
+        print("No info for user "+str(user))
+
+    if user_info:
+        print(user_info.phone_number)
+
+    return render(request, 'profile_details.html', {'user_info': user_info})
 
 
 @login_required
