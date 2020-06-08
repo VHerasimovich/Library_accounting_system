@@ -23,21 +23,7 @@ def signup(request):
             user_info = LibraryUserInfo(library_user=user,
                                         phone_number=form.cleaned_data.get('phone_number'))
             user_info.save()
-
-            if form.cleaned_data.get('pick_city'):
-                current_city = CitiesList.objects.get(city_name=form.cleaned_data.get('pick_city'))
-            else:
-                new_city = CitiesList(city_name=form.cleaned_data.get('add_city'))
-                new_city.save()
-                current_city = CitiesList.objects.get(city_name=form.cleaned_data.get('add_city'))
-
-            if form.cleaned_data.get('pick_street'):
-                current_street = StreetsList.objects.get(street_name=form.cleaned_data.get('pick_street'))
-            else:
-                new_city = StreetsList(street_name=form.cleaned_data.get('add_street'))
-                new_city.save()
-                current_street = StreetsList.objects.get(street_name=form.cleaned_data.get('add_street'))
-
+            current_city, current_street = city_street_checker(form)
             user_address = LibraryUserAddress(library_user=LibraryUserInfo.objects.get(library_user=user),
                                               city_name=current_city,
                                               street_name=current_street,
@@ -59,6 +45,31 @@ def signup(request):
     else:
         form = SignupForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+
+def city_street_checker(signup_form):
+    # city name input check
+    if signup_form.cleaned_data.get('pick_city') and not(signup_form.cleaned_data.get('add_city')):
+        selected_city = CitiesList.objects.get(city_name=signup_form.cleaned_data.get('pick_city'))
+    elif not(signup_form.cleaned_data.get('pick_city')) and signup_form.cleaned_data.get('add_city'):
+        new_city = CitiesList(city_name=signup_form.cleaned_data.get('add_city'))
+        new_city.save()
+        selected_city = CitiesList.objects.get(city_name=signup_form.cleaned_data.get('add_city'))
+    else:
+        # if used both 'pick' and 'add' city, 'pick' will be prioritized
+        selected_city = CitiesList.objects.get(city_name=signup_form.cleaned_data.get('pick_city'))
+    # street name input check
+    if signup_form.cleaned_data.get('pick_street') and not(signup_form.cleaned_data.get('add_street')):
+        selected_street = StreetsList.objects.get(street_name=signup_form.cleaned_data.get('pick_street'))
+    elif not(signup_form.cleaned_data.get('pick_street')) and signup_form.cleaned_data.get('add_street'):
+        new_street = StreetsList(street_name=signup_form.cleaned_data.get('add_street'))
+        new_street.save()
+        selected_street = StreetsList.objects.get(street_name=signup_form.cleaned_data.get('add_street'))
+    else:
+        # if used both 'pick' and 'add' street, 'pick' will be prioritized
+        selected_street = StreetsList.objects.get(street_name=signup_form.cleaned_data.get('pick_street'))
+
+    return selected_city, selected_street
 
 
 def activate(request, uidb64, token):
