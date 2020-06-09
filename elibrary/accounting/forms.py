@@ -1,18 +1,33 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from .models import CitiesList, StreetsList
 
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Required')
     phone_number = forms.IntegerField(max_value=99999, min_value=00000)
-    pick_city = forms.ModelChoiceField(CitiesList.objects.all(), required=False)    # select city from the DB
-    add_city = forms.CharField(max_length=200, required=False)    # or add new city name in DB manually
-    pick_street = forms.ModelChoiceField(StreetsList.objects.all(), required=False)    # select street from the DB
-    add_street = forms.CharField(max_length=200, required=False)    # or add new street name in DB manually
-    user_building_number = forms.IntegerField(max_value=999, min_value=000)
-    user_apartment_number = forms.IntegerField(max_value=999, min_value=000)
+    # select city from the DB
+    pick_city = forms.ModelChoiceField(CitiesList.objects.all(), required=False)
+    # or add new city name in DB manually
+    add_city = forms.CharField(max_length=200,
+                               required=False,
+                               # city name consist of only letters, '-' and space symbols
+                               validators=[RegexValidator(regex='^[-\sA-Za-z]*$',
+                                                          message='City name contains invalid symbols!',
+                                                          code='invalid')])
+    # select street from the DB
+    pick_street = forms.ModelChoiceField(StreetsList.objects.all(), required=False)
+    # or add new street name in DB manually
+    add_street = forms.CharField(max_length=200,
+                                 required=False,
+                                 # city name consist of only letters, numbers, '-' and space symbols
+                                 validators=[RegexValidator(regex='^[-\sA-Za-z0-9]*$',
+                                                            message='Street name contains invalid symbols!',
+                                                            code='invalid')])
+    user_building_number = forms.IntegerField(max_value=999, min_value=000, label='Building number')
+    user_apartment_number = forms.IntegerField(max_value=999, min_value=000, label='Apartment number')
 
     class Meta:
         model = User

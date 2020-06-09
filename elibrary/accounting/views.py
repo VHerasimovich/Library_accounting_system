@@ -8,6 +8,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
+from django import forms
 from .tokens import account_activation_token
 from .forms import SignupForm
 from .models import *
@@ -52,9 +53,10 @@ def city_street_checker(signup_form):
     if signup_form.cleaned_data.get('pick_city') and not(signup_form.cleaned_data.get('add_city')):
         selected_city = CitiesList.objects.get(city_name=signup_form.cleaned_data.get('pick_city'))
     elif not(signup_form.cleaned_data.get('pick_city')) and signup_form.cleaned_data.get('add_city'):
-        new_city = CitiesList(city_name=signup_form.cleaned_data.get('add_city'))
+        city_form_info = str(signup_form.cleaned_data.get('add_city')).capitalize()
+        new_city = CitiesList(city_name=city_form_info)
         new_city.save()
-        selected_city = CitiesList.objects.get(city_name=signup_form.cleaned_data.get('add_city'))
+        selected_city = CitiesList.objects.get(city_name=city_form_info)
     else:
         # if used both 'pick' and 'add' city, 'pick' will be prioritized
         selected_city = CitiesList.objects.get(city_name=signup_form.cleaned_data.get('pick_city'))
@@ -62,9 +64,10 @@ def city_street_checker(signup_form):
     if signup_form.cleaned_data.get('pick_street') and not(signup_form.cleaned_data.get('add_street')):
         selected_street = StreetsList.objects.get(street_name=signup_form.cleaned_data.get('pick_street'))
     elif not(signup_form.cleaned_data.get('pick_street')) and signup_form.cleaned_data.get('add_street'):
-        new_street = StreetsList(street_name=signup_form.cleaned_data.get('add_street'))
+        street_form_info = str(signup_form.cleaned_data.get('add_street')).capitalize()
+        new_street = StreetsList(street_name=street_form_info)
         new_street.save()
-        selected_street = StreetsList.objects.get(street_name=signup_form.cleaned_data.get('add_street'))
+        selected_street = StreetsList.objects.get(street_name=street_form_info)
     else:
         # if used both 'pick' and 'add' street, 'pick' will be prioritized
         selected_street = StreetsList.objects.get(street_name=signup_form.cleaned_data.get('pick_street'))
