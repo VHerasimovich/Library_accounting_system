@@ -12,7 +12,7 @@ class Author(models.Model):
         return name_surname
 
     class Meta:
-        verbose_name_plural = '1. Authors'    # number is used for custom ordering in the admin page
+        verbose_name_plural = '1. Authors'  # number is used for custom ordering in the admin page
 
 
 class FictionBook(models.Model):
@@ -45,13 +45,13 @@ class ScienceBook(models.Model):
 
 class Article(models.Model):
     work_author = models.ManyToManyField(Author,
-                                         related_name='article_authors')    # ???
+                                         related_name='article_authors')  # ???
     title = models.CharField(max_length=300)
     journal = models.CharField(max_length=300)
     impact_factor = models.PositiveSmallIntegerField(default=1)
     volume = models.PositiveSmallIntegerField(default=1)
     article_number = models.PositiveSmallIntegerField(default=1)
-    pages = models.CharField(max_length=20)    # CharField because of range: "aaa-bbb" pages
+    pages = models.CharField(max_length=20)  # CharField because of range: "aaa-bbb" pages
     publishing_year = models.DateField(auto_now=False, auto_now_add=False)
     doi = models.CharField(max_length=200)
 
