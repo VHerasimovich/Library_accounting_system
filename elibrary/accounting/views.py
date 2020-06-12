@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django import forms
 from .tokens import account_activation_token
-from .forms import SignupForm, ProfileInfo
+from .forms import SignupForm, ProfileInfoEdit
 from .models import *
 
 
@@ -130,7 +130,16 @@ def detailed_library_unit_info(request, unit_type):
 @login_required
 def profile_edit(request):
     if request.method == 'POST':
-        form = ProfileInfo(request.POST)
+        form = ProfileInfoEdit(request.POST)
+
     else:
-        form = ProfileInfo(request.POST)
+        user_info = LibraryUserInfo.objects.get(library_user=request.user)
+        user_address = LibraryUserAddress.objects.get(library_user=user_info)
+        initial_data = {'email': request.user.email,
+                        'phone_number': user_info.phone_number,
+                        'add_city': user_address.city_name,
+                        'add_street': user_address.street_name,
+                        'user_building_number': user_address.building_number,
+                        'user_apartment_number': user_address.apartment_number}
+        form = ProfileInfoEdit(initial=initial_data)
     return render(request, 'edit_profile_info.html', {'form': form})

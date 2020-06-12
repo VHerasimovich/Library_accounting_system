@@ -46,3 +46,9 @@ class SignupForm(UserCreationForm, ProfileInfo):
                   'pick_street', 'add_street',
                   'user_building_number', 'user_apartment_number',
                   'password1', 'password2')
+
+
+class ProfileInfoEdit(ProfileInfo):
+    # remove some fields
+    pick_city = None
+    pick_street = None
