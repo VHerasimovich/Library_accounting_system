@@ -52,3 +52,11 @@ class ProfileInfoEdit(ProfileInfo):
     # remove some fields
     pick_city = None
     pick_street = None
+
+    class Meta:
+        model = User
+        fields = ('email', 'phone_number',
+                  'add_city',
+                  'add_street',
+                  'user_building_number', 'user_apartment_number'
+                  )

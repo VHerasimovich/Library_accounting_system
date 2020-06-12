@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
-from django import forms
 from .tokens import account_activation_token
 from .forms import SignupForm, ProfileInfoEdit
 from .models import *
@@ -129,17 +127,38 @@ def detailed_library_unit_info(request, unit_type):
 
 @login_required
 def profile_edit(request):
-    if request.method == 'POST':
-        form = ProfileInfoEdit(request.POST)
+    user_info = LibraryUserInfo.objects.get(library_user=request.user)
+    user_address = LibraryUserAddress.objects.get(library_user=user_info)
+    initial_data = {'email': request.user.email,
+                    'phone_number': user_info.phone_number,
+                    'user_building_number': user_address.building_number,
+                    'user_apartment_number': user_address.apartment_number}
 
+    if request.method == 'POST':
+        form = ProfileInfoEdit(request.POST, initial=initial_data)
+        if form.has_changed():
+            if form.is_valid():
+                changed_fields = form.changed_data
+                for current_field in changed_fields:
+                    new_field_data = form.cleaned_data.get(current_field)
+                    if current_field == 'email':
+                        request.user.email = new_field_data
+                    elif current_field == 'phone_number':
+                        user_info.phone_number = new_field_data
+                    elif current_field == 'add_city':
+                        current_city = city_street_checker(form, model_type=CitiesList, address_part='city')
+                        user_address.city_name = current_city
+                    elif current_field == 'add_street':
+                        current_street = city_street_checker(form, model_type=StreetsList, address_part='street')
+                        user_address.street_name = current_street
+                    elif current_field == 'user_building_number':
+                        user_address.building_number = new_field_data
+                    elif current_field == 'user_apartment_number':
+                        user_address.apartment_number = new_field_data
+            request.user.save()
+            user_info.save()
+            user_address.save()
     else:
-        user_info = LibraryUserInfo.objects.get(library_user=request.user)
-        user_address = LibraryUserAddress.objects.get(library_user=user_info)
-        initial_data = {'email': request.user.email,
-                        'phone_number': user_info.phone_number,
-                        'add_city': user_address.city_name,
-                        'add_street': user_address.street_name,
-                        'user_building_number': user_address.building_number,
-                        'user_apartment_number': user_address.apartment_number}
         form = ProfileInfoEdit(initial=initial_data)
+
     return render(request, 'edit_profile_info.html', {'form': form})

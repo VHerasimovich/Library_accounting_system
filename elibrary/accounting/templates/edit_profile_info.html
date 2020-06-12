@@ -20,4 +20,5 @@ Editing user <b>"{{ request.user }}"</b> profile info.
         {% csrf_token %}
         <button type="submit">Save changes</button>
     </form>
+    <a href="{% url "profile_details" %}">Go back to the profile</a>
 {% endblock %}
