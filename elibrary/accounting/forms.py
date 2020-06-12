@@ -36,3 +36,12 @@ class SignupForm(UserCreationForm):
                   'pick_street', 'add_street',
                   'user_building_number', 'user_apartment_number',
                   'password1', 'password2')
+
+
+class ProfileInfoEdit(SignupForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'phone_number',
+                  'pick_city', 'add_city',
+                  'pick_street', 'add_street',
+                  'user_building_number', 'user_apartment_number')

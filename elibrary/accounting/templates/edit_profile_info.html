@@ -1,0 +1,23 @@
+<h1>Edit user profile</h1>
+Editing user "{{ request.user }}" profile info.
+<br>
+
+{% block content %}
+    <h2>Edit</h2>
+    <form method="post">
+            {% for field in form %}
+            <p>
+                {{ field.label_tag }}<br>
+                <p> {{ field }} </p>
+                {% if field.help_text %}
+                    <small style="display: none">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
+            </p>
+            {% endfor %}
+        {% csrf_token %}
+        <button type="submit">Save changes</button>
+    </form>
+{% endblock %}
