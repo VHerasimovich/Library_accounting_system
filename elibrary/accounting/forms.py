@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 from .models import CitiesList, StreetsList
 
 
-class SignupForm(UserCreationForm):
+class ProfileInfo(forms.Form):
     email = forms.EmailField(max_length=200, help_text='Required')
     phone_number = forms.IntegerField(max_value=99999, min_value=00000)
     # select city from the DB
@@ -31,17 +31,18 @@ class SignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'phone_number',
+        fields = ('email', 'phone_number',
                   'pick_city', 'add_city',
                   'pick_street', 'add_street',
-                  'user_building_number', 'user_apartment_number',
-                  'password1', 'password2')
+                  'user_building_number', 'user_apartment_number'
+                  )
 
 
-class ProfileInfoEdit(SignupForm):
+class SignupForm(UserCreationForm, ProfileInfo):
     class Meta:
         model = User
         fields = ('username', 'email', 'phone_number',
                   'pick_city', 'add_city',
                   'pick_street', 'add_street',
-                  'user_building_number', 'user_apartment_number')
+                  'user_building_number', 'user_apartment_number',
+                  'password1', 'password2')
