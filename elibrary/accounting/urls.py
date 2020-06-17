@@ -16,7 +16,10 @@ urlpatterns = [
     path('profile_edit/',
          views.profile_edit,
          name='profile_edit'),
-    path('detailed_info/<str:unit_type>/',
-         views.detailed_library_unit_info,
+    path('common_info/<str:unit_type>/',
+         views.common_library_unit_info,
+         name='common_info'),
+    path('detailed_info/<str:unit_type>',
+         views.library_unit_details,
          name='detailed_info'),
 ]

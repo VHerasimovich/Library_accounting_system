@@ -111,18 +111,22 @@ def profile_detail(request):
 
 
 @login_required
-def detailed_library_unit_info(request, unit_type):
+def common_library_unit_info(request, unit_type):
     all_articles = all_science_books = all_fiction_books = None
     if unit_type == 'articles':
         all_articles = Article.objects.all()
+        all_article_fields = Article._meta.get_fields()
+        for field in all_article_fields:
+            print(field.name)
+
     elif unit_type == 'science_books':
         all_science_books = ScienceBook.objects.all()
     elif unit_type == 'fiction_books':
         all_fiction_books = FictionBook.objects.all()
 
-    return render(request, 'detailed_info_view.html', {'all_articles': all_articles,
-                                                       'all_science_books': all_science_books,
-                                                       'all_fiction_books': all_fiction_books})
+    return render(request, 'common_info_view.html', {'all_articles': all_articles,
+                                                     'all_science_books': all_science_books,
+                                                     'all_fiction_books': all_fiction_books})
 
 
 @login_required
@@ -162,3 +166,8 @@ def profile_edit(request):
         form = ProfileInfoEdit(initial=initial_data)
 
     return render(request, 'edit_profile_info.html', {'form': form})
+
+
+@login_required()
+def library_unit_details(request, unit_type):
+    return render(request, 'library_unit_details.html')

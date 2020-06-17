@@ -6,13 +6,7 @@
         <tr>
             <th>Title</th>
             <th>Authors</th>
-            <th>Journal</th>
-            <th>Impact Factor</th>
-            <th>Volume</th>
-            <th>Article number</th>
-            <th>Pages</th>
-            <th>Publishing year</th>
-            <th>DOI</th>
+            <th>Library Unit Management</th>
         </tr>
         {% for current_article in all_articles %}
             <tr>
@@ -20,19 +14,16 @@
                 <td>{% for current_author in current_article.work_author.all %}
                         {{current_author}}<br>
                     {% endfor %}</td>
-                <td>{{ current_article.journal }}</td>
-                <td>{{ current_article.impact_factor }}</td>
-                <td>{{ current_article.volume }}</td>
-                <td>{{ current_article.article_number }}</td>
-                <td>{{ current_article.pages }}</td>
-                <td>{{ current_article.publishing_year }}</td>
-                <td>{{ current_article.doi }}</td>
+                <td><center><a href="{% url 'detailed_info' 'article_details' %}">Details, </a>
+                            <a href="{% url 'common_info' 'edit' %}">Edit, </a>
+                            <a href="{% url 'common_info' 'delete' %}">Delete</a></center></td>
             </tr>
         {% endfor %}
     {% elif all_fiction_books is not None %}
         <tr>
             <th>Title</th>
             <th>Authors</th>
+            <th>Library Unit Management</th>
         </tr>
         {% for current_fiction_books in all_fiction_books %}
             <tr>
@@ -40,16 +31,16 @@
                 <td>{% for current_author in current_fiction_books.work_author.all %}
                         {{current_author}}<br>
                     {% endfor %}</td>
+                <td><center><a href="{% url 'detailed_info' 'fiction_book_details' %}">Details, </a>
+                            <a href="{% url 'common_info' 'science_books' %}">Edit, </a>
+                            <a href="{% url 'common_info' 'science_books' %}">Delete</a></center></td>
             </tr>
         {% endfor %}
     {% elif all_science_books is not None %}
          <tr>
             <th>Title</th>
             <th>Authors</th>
-            <th>Publisher</th>
-            <th>Edition</th>
-            <th>Publishing year</th>
-            <th>isbn</th>
+            <th>Library Unit Management</th>
         </tr>
         {% for current_science_books in all_science_books %}
             <tr>
@@ -57,10 +48,9 @@
                 <td>{% for current_author in current_science_books.work_author.all %}
                         {{current_author}}<br>
                     {% endfor %}</td>
-                <td>{{ current_science_books.publisher }}</td>
-                <td>{{ current_science_books.edition }}</td>
-                <td>{{ current_science_books.publishing_year }}</td>
-                <td>{{ current_science_books.isbn }}</td>
+                <td><center><a href="{% url 'detailed_info' 'science_book_details' %}">Details, </a>
+                            <a href="{% url 'common_info' 'science_books' %}">Edit, </a>
+                            <a href="{% url 'common_info' 'science_books' %}">Delete</a></center></td>
             </tr>
         {% endfor %}
     {% endif %}
