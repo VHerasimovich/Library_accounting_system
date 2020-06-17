@@ -181,3 +181,8 @@ def library_unit_details(request, unit_type, unit_number):
     return render(request, 'library_unit_details.html', {'current_article': current_article,
                                                          'current_science_book': current_science_book,
                                                          'current_fiction_book': current_fiction_book})
+
+
+@login_required()
+def library_unit_edit(request, unit_type, unit_number):
+    return render(request, 'library_unit_edit.html')
