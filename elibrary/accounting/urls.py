@@ -19,7 +19,7 @@ urlpatterns = [
     path('common_info/<str:unit_type>/',
          views.common_library_unit_info,
          name='common_info'),
-    path('detailed_info/<str:unit_type>',
+    path('detailed_info/<str:unit_type>/<int:unit_number>',
          views.library_unit_details,
          name='detailed_info'),
 ]

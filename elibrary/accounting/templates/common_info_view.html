@@ -14,7 +14,7 @@
                 <td>{% for current_author in current_article.work_author.all %}
                         {{current_author}}<br>
                     {% endfor %}</td>
-                <td><center><a href="{% url 'detailed_info' 'article_details' %}">Details, </a>
+                <td><center><a href="{% url 'detailed_info' 'article_details' current_article.id %}">Details, </a>
                             <a href="{% url 'common_info' 'edit' %}">Edit, </a>
                             <a href="{% url 'common_info' 'delete' %}">Delete</a></center></td>
             </tr>
@@ -25,13 +25,13 @@
             <th>Authors</th>
             <th>Library Unit Management</th>
         </tr>
-        {% for current_fiction_books in all_fiction_books %}
+        {% for current_fiction_book in all_fiction_books %}
             <tr>
-                <td>{{ current_fiction_books.title }}</td>
-                <td>{% for current_author in current_fiction_books.work_author.all %}
+                <td>{{ current_fiction_book.title }}</td>
+                <td>{% for current_author in current_fiction_book.work_author.all %}
                         {{current_author}}<br>
                     {% endfor %}</td>
-                <td><center><a href="{% url 'detailed_info' 'fiction_book_details' %}">Details, </a>
+                <td><center><a href="{% url 'detailed_info' 'fiction_book_details' current_fiction_book.id %}">Details, </a>
                             <a href="{% url 'common_info' 'science_books' %}">Edit, </a>
                             <a href="{% url 'common_info' 'science_books' %}">Delete</a></center></td>
             </tr>
@@ -42,13 +42,13 @@
             <th>Authors</th>
             <th>Library Unit Management</th>
         </tr>
-        {% for current_science_books in all_science_books %}
+        {% for current_science_book in all_science_books %}
             <tr>
-                <td>{{ current_science_books.title }}</td>
-                <td>{% for current_author in current_science_books.work_author.all %}
+                <td>{{ current_science_book.title }}</td>
+                <td>{% for current_author in current_science_book.work_author.all %}
                         {{current_author}}<br>
                     {% endfor %}</td>
-                <td><center><a href="{% url 'detailed_info' 'science_book_details' %}">Details, </a>
+                <td><center><a href="{% url 'detailed_info' 'science_book_details' current_science_book.id %}">Details, </a>
                             <a href="{% url 'common_info' 'science_books' %}">Edit, </a>
                             <a href="{% url 'common_info' 'science_books' %}">Delete</a></center></td>
             </tr>

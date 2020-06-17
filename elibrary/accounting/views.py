@@ -169,5 +169,15 @@ def profile_edit(request):
 
 
 @login_required()
-def library_unit_details(request, unit_type):
-    return render(request, 'library_unit_details.html')
+def library_unit_details(request, unit_type, unit_number):
+    current_article = current_science_book = current_fiction_book = None
+    if unit_type == 'article_details':
+        current_article = Article.objects.get(pk=unit_number)
+    elif unit_type == 'science_book_details':
+        current_science_book = ScienceBook.objects.get(pk=unit_number)
+    elif unit_type == 'fiction_book_details':
+        current_fiction_book = FictionBook.objects.get(pk=unit_number)
+
+    return render(request, 'library_unit_details.html', {'current_article': current_article,
+                                                         'current_science_book': current_science_book,
+                                                         'current_fiction_book': current_fiction_book})

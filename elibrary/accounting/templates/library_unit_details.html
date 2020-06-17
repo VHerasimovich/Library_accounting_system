@@ -1,1 +1,64 @@
-Hello!
+{% block content %}
+
+
+<table border="1" width="100%">
+    {% if current_article is not None %}
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Journal</th>
+            <th>Impact Factor</th>
+            <th>Volume</th>
+            <th>Article number</th>
+            <th>Pages</th>
+            <th>Publishing year</th>
+            <th>DOI</th>
+        </tr>
+        <tr>
+            <td>{{ current_article.title }}</td>
+            <td>{% for current_author in current_article.work_author.all %}
+                    {{current_author}}<br>
+                {% endfor %}</td>
+            <td>{{ current_article.journal }}</td>
+            <td>{{ current_article.impact_factor }}</td>
+            <td>{{ current_article.volume }}</td>
+            <td>{{ current_article.article_number }}</td>
+            <td>{{ current_article.pages }}</td>
+            <td>{{ current_article.publishing_year }}</td>
+            <td>{{ current_article.doi }}</td>
+        </tr>
+    {% elif current_science_book is not None %}
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Publisher</th>
+            <th>Edition</th>
+            <th>Publishing year</th>
+            <th>isbn</th>
+        </tr>
+        <tr>
+            <td>{{ current_science_book.title }}</td>
+            <td>{% for current_author in current_science_book.work_author.all %}
+                    {{current_author}}<br>
+                {% endfor %}</td>
+            <td>{{ current_science_book.publisher }}</td>
+            <td>{{ current_science_book.edition }}</td>
+            <td>{{ current_science_book.publishing_year }}</td>
+            <td>{{ current_science_book.isbn }}</td>
+        </tr>
+    {% elif current_fiction_book is not None %}
+         <tr>
+            <th>Title</th>
+            <th>Authors</th>
+        </tr>
+        <tr>
+            <td>{{ current_fiction_book.title }}</td>
+            <td>{% for current_author in current_fiction_book.work_author.all %}
+                    {{current_author}}<br>
+                {% endfor %}</td>
+        </tr>
+    {% endif %}
+
+</table>
+
+{% endblock %}
