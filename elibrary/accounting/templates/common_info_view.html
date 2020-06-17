@@ -16,7 +16,7 @@
                     {% endfor %}</td>
                 <td><center><a href="{% url 'detailed_info' 'article_details' current_article.id %}">Details, </a>
                             <a href="{% url 'edit_info' 'edit_article' current_article.id %}">Edit, </a>
-                            <a href="{% url 'common_info' 'delete' %}">Delete</a></center></td>
+                            <a href="{% url 'delete_library_unit' 'delete_article' current_article.id %}">Delete</a></center></td>
             </tr>
         {% endfor %}
     {% elif all_fiction_books is not None %}
@@ -33,7 +33,7 @@
                     {% endfor %}</td>
                 <td><center><a href="{% url 'detailed_info' 'fiction_book_details' current_fiction_book.id %}">Details, </a>
                             <a href="{% url 'edit_info' 'edit_fiction_book' current_fiction_book.id %}">Edit, </a>
-                            <a href="{% url 'common_info' 'science_books' %}">Delete</a></center></td>
+                            <a href="{% url 'delete_library_unit' 'delete_fiction_book' current_fiction_book.id %}">Delete</a></center></td>
             </tr>
         {% endfor %}
     {% elif all_science_books is not None %}
@@ -50,7 +50,7 @@
                     {% endfor %}</td>
                 <td><center><a href="{% url 'detailed_info' 'science_book_details' current_science_book.id %}">Details, </a>
                             <a href="{% url 'edit_info' 'edit_science_book' current_science_book.id %}">Edit, </a>
-                            <a href="{% url 'common_info' 'science_books' %}">Delete</a></center></td>
+                            <a href="{% url 'delete_library_unit' 'delete_science_book' current_science_book.id %}">Delete</a></center></td>
             </tr>
         {% endfor %}
     {% endif %}

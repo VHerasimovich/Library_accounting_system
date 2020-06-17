@@ -24,5 +24,8 @@ urlpatterns = [
          name='detailed_info'),
     path('edit/<str:unit_type>/<int:unit_number>/',
          views.library_unit_edit,
-         name='edit_info')
+         name='edit_info'),
+    path('delete/<str:unit_type>/<int:unit_number>/',
+         views.library_unit_delete,
+         name='delete_library_unit'),
 ]

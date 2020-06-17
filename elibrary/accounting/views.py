@@ -115,10 +115,6 @@ def common_library_unit_info(request, unit_type):
     all_articles = all_science_books = all_fiction_books = None
     if unit_type == 'articles':
         all_articles = Article.objects.all()
-        all_article_fields = Article._meta.get_fields()
-        for field in all_article_fields:
-            print(field.name)
-
     elif unit_type == 'science_books':
         all_science_books = ScienceBook.objects.all()
     elif unit_type == 'fiction_books':
@@ -201,7 +197,23 @@ def library_unit_edit(request, unit_type, unit_number):
         elif unit_type == 'edit_science_book':
             form = ScienceBookInfo()
 
-    unit_type_title = unit_type.replace('_', ' ')
+    unit_type_title = unit_type.replace('_', ' ')    # prepare unit_type argument for the page title
     unit_type_title = unit_type_title.title()
     return render(request, 'library_unit_edit.html', {'form': form,
                                                       'unit_type': unit_type_title})
+
+
+@login_required()
+def library_unit_delete(request, unit_type, unit_number):
+    current_unit = None
+    if unit_type == 'delete_article':
+        current_unit = Article.objects.get(pk=unit_number)
+    elif unit_type == 'delete_science_book':
+        current_unit = ScienceBook.objects.get(pk=unit_number)
+    elif unit_type == 'delete_fiction_book':
+        current_unit = FictionBook.objects.get(pk=unit_number)
+
+    if current_unit:
+        current_unit.delete()
+
+    return render(request, 'library_unit_delete.html', {'current_unit': current_unit})
