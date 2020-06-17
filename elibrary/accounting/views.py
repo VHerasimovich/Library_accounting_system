@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
-from .forms import SignupForm, ProfileInfoEdit
+from .forms import SignupForm, ProfileInfoEdit, ArticleInfo, FictionBookInfo, ScienceBookInfo
 from .models import *
 
 
@@ -185,4 +185,23 @@ def library_unit_details(request, unit_type, unit_number):
 
 @login_required()
 def library_unit_edit(request, unit_type, unit_number):
-    return render(request, 'library_unit_edit.html')
+    form = None
+    if request.method == 'POST':
+        if unit_type == 'edit_article':
+            form = ArticleInfo(request.POST)
+        elif unit_type == 'edit_fiction_book':
+            form = FictionBookInfo(request.POST)
+        elif unit_type == 'edit_science_book':
+            form = ScienceBookInfo(request.POST)
+    else:
+        if unit_type == 'edit_article':
+            form = ArticleInfo()
+        elif unit_type == 'edit_fiction_book':
+            form = FictionBookInfo()
+        elif unit_type == 'edit_science_book':
+            form = ScienceBookInfo()
+
+    unit_type_title = unit_type.replace('_', ' ')
+    unit_type_title = unit_type_title.title()
+    return render(request, 'library_unit_edit.html', {'form': form,
+                                                      'unit_type': unit_type_title})

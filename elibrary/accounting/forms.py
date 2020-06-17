@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from .models import CitiesList, StreetsList
+from .models import CitiesList, StreetsList, Article, FictionBook, ScienceBook
 
 
 class ProfileInfo(forms.Form):
@@ -60,3 +60,37 @@ class ProfileInfoEdit(ProfileInfo):
                   'add_street',
                   'user_building_number', 'user_apartment_number'
                   )
+
+
+class LibraryUnitBaseInfo(forms.Form):
+    author_name = forms.CharField(max_length=100)
+    author_surname = forms.CharField(max_length=100)
+    title = forms.CharField(max_length=300)
+
+
+class ArticleInfo(LibraryUnitBaseInfo):
+    journal = forms.CharField(max_length=300)
+    impact_factor = forms.IntegerField(max_value=100, min_value=0)
+    volume = forms.IntegerField(max_value=100, min_value=0)
+    article_number = forms.IntegerField(max_value=100, min_value=0)
+    pages = forms.CharField(max_length=20)
+    publishing_year = forms.DateField()
+    doi = forms.CharField(max_length=200)
+
+    class Meta:
+        model = Article
+
+
+class FictionBookInfo(LibraryUnitBaseInfo):
+    class Meta:
+        model = FictionBook
+
+
+class ScienceBookInfo(LibraryUnitBaseInfo):
+    publisher = forms.CharField(max_length=200)
+    edition = forms.IntegerField(max_value=100, min_value=0)
+    publishing_year = forms.DateField()
+    isbn = forms.CharField(max_length=200)
+
+    class Meta:
+        model = ScienceBook
