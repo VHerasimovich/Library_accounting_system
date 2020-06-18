@@ -103,9 +103,6 @@ def profile_detail(request):
         user_address = None
         print("No address info for user "+str(user_info.library_user))
 
-    if user_address:
-        print(user_address.city_name)
-
     return render(request, 'profile_details.html', {'user_info': user_info,
                                                     'user_address': user_address})
 
@@ -182,20 +179,45 @@ def library_unit_details(request, unit_type, unit_number):
 @login_required()
 def library_unit_edit(request, unit_type, unit_number):
     form = None
+    current_unit = None
+
+    if unit_type == 'edit_article':
+        current_unit = Article.objects.get(pk=unit_number)
+    elif unit_type == 'edit_fiction_book':
+        current_unit = FictionBook.objects.get(pk=unit_number)
+    elif unit_type == 'edit_science_book':
+        current_unit = ScienceBook.objects.get(pk=unit_number)
+
+    all_fields = current_unit._meta.get_fields()
+    initial_data = {current_field.name: getattr(current_unit, current_field.name) for current_field in all_fields
+                    if current_field.name != 'libraryunit'    # not displayed
+                    and current_field.name != 'id'            # not displayed
+                    and current_field.name != 'work_author'}  # need to prepare
+    # preparing lists with authors names and surnames
+    current_authors = current_unit.work_author.all()
+    author_name = []
+    author_surname = []
+    for each_author in current_authors:
+        author_name.append(each_author.author_name)
+        author_surname.append(each_author.author_surname)
+
+    initial_data.update({'author_name': author_name,
+                         'author_surname': author_surname})    # complete initial library unit dict for the form
+
     if request.method == 'POST':
         if unit_type == 'edit_article':
-            form = ArticleInfo(request.POST)
+            form = ArticleInfo(request.POST, initial=initial_data)
         elif unit_type == 'edit_fiction_book':
-            form = FictionBookInfo(request.POST)
+            form = FictionBookInfo(request.POST, initial=initial_data)
         elif unit_type == 'edit_science_book':
-            form = ScienceBookInfo(request.POST)
+            form = ScienceBookInfo(request.POST, initial=initial_data)
     else:
         if unit_type == 'edit_article':
-            form = ArticleInfo()
+            form = ArticleInfo(initial=initial_data)
         elif unit_type == 'edit_fiction_book':
-            form = FictionBookInfo()
+            form = FictionBookInfo(initial=initial_data)
         elif unit_type == 'edit_science_book':
-            form = ScienceBookInfo()
+            form = ScienceBookInfo(initial=initial_data)
 
     unit_type_title = unit_type.replace('_', ' ')    # prepare unit_type argument for the page title
     unit_type_title = unit_type_title.title()
