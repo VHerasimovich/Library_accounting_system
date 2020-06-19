@@ -211,6 +211,14 @@ def library_unit_edit(request, unit_type, unit_number):
             form = FictionBookInfo(request.POST, initial=initial_data)
         elif unit_type == 'edit_science_book':
             form = ScienceBookInfo(request.POST, initial=initial_data)
+
+        if form.has_changed():
+            if form.is_valid():
+                changed_fields = form.changed_data
+                for field_to_save in changed_fields:
+                    if field_to_save != 'author_name' and field_to_save != 'author_surname':
+                        setattr(current_unit, field_to_save, form.cleaned_data.get(field_to_save))
+            current_unit.save()
     else:
         if unit_type == 'edit_article':
             form = ArticleInfo(initial=initial_data)
