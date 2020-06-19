@@ -218,7 +218,34 @@ def library_unit_edit(request, unit_type, unit_number):
                 for field_to_save in changed_fields:
                     if field_to_save != 'author_name' and field_to_save != 'author_surname':
                         setattr(current_unit, field_to_save, form.cleaned_data.get(field_to_save))
+                # parse name from form field
+                item = 0
+                db_index = 0
+                for name in form.cleaned_data.get('author_name').split("\'"):
+                    # first is '[', second is name, third is ',' etc.
+                    if item % 2:
+                        current_authors[db_index].author_name = name
+                        db_index += 1
+                    item += 1
+
+
+                # parse surname from form field
+                item = 0
+                db_index = 0
+                for surname in form.cleaned_data.get('author_surname').split("\'"):
+                    # first is '[', second is name, third is ',' etc.
+                    if item % 2:
+                        current_authors[db_index].author_surname = surname
+                        db_index += 1
+                    item += 1
+
+                print(current_authors[0].author_name)
+                print(current_authors[1].author_name)
+                print(current_authors[0].author_surname)
+                print(current_authors[1].author_surname)
+
             current_unit.save()
+            current_authors.update()
     else:
         if unit_type == 'edit_article':
             form = ArticleInfo(initial=initial_data)
