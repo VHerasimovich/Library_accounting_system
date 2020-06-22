@@ -228,7 +228,6 @@ def library_unit_edit(request, unit_type, unit_number):
                         db_index += 1
                     item += 1
 
-
                 # parse surname from form field
                 item = 0
                 db_index = 0
@@ -239,10 +238,14 @@ def library_unit_edit(request, unit_type, unit_number):
                         db_index += 1
                     item += 1
 
-                print(current_authors[0].author_name)
-                print(current_authors[1].author_name)
-                print(current_authors[0].author_surname)
-                print(current_authors[1].author_surname)
+                # updating authors in the DB
+                for author in range(len(current_authors)):
+                    Author.objects.filter(author_name=author_name[author]).\
+                        filter(author_surname=author_surname[author]).\
+                        update(author_name=current_authors[author].author_name)
+                    Author.objects.filter(author_name=author_name[author]).\
+                        filter(author_surname=author_surname[author]).\
+                        update(author_surname=current_authors[author].author_surname)
 
             current_unit.save()
             current_authors.update()
