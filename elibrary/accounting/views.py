@@ -264,6 +264,28 @@ def library_unit_edit(request, unit_type, unit_number):
 
 
 @login_required()
+def library_unit_add(request, unit_type):
+    form = None
+    if request.method == 'POST':
+        if unit_type == 'article':
+            form = ArticleInfo(request.POST)
+        elif unit_type == 'fiction_book':
+            form = FictionBookInfo(request.POST)
+        elif unit_type == 'science_book':
+            form = ScienceBookInfo(request.POST)
+    else:
+        if unit_type == 'article':
+            form = ArticleInfo()
+        elif unit_type == 'fiction_book':
+            form = FictionBookInfo()
+        elif unit_type == 'science_book':
+            form = ScienceBookInfo()
+
+    return render(request, 'library_unit_add.html', {'form': form,
+                                                     'unit_type': unit_type})
+
+
+@login_required()
 def library_unit_delete(request, unit_type, unit_number):
     current_unit = None
     if unit_type == 'delete_article':
