@@ -265,29 +265,40 @@ def library_unit_edit(request, unit_type, unit_number):
 
 @login_required()
 def library_unit_add(request, unit_type):
-    form = None
+    form = unit_model = None
     if request.method == 'POST':
         if unit_type == 'article':
             form = ArticleInfo(request.POST)
+            unit_model = Article
         elif unit_type == 'fiction_book':
             form = FictionBookInfo(request.POST)
+            unit_model = FictionBook
         elif unit_type == 'science_book':
             form = ScienceBookInfo(request.POST)
+            unit_model = ScienceBook
 
         if form.is_valid():
+            unit_fields = {}
+            new_unit = unit_model(id=unit_model.objects.all().count())
             for current_field in form.fields:
                 # author name, surname parsing and storing
                 if current_field == 'author_name':
                     name_string = form.cleaned_data.get('author_name').split(",")
                     surname_string = form.cleaned_data.get('author_surname').split(",")
                     i = 0
+                    new_work_authors = []
                     for one_name in name_string:
                         new_author = None
                         new_author = Author(author_name=one_name, author_surname=surname_string[i])
+                        new_work_authors.append(new_author)
                         new_author.save()   # need to be reviewed! too many DB access
                         i += 1
-
-
+                # library unit fields preparing for save
+                elif current_field != 'author_name' and current_field != 'author_surname':
+                    unit_fields.update({current_field: form.cleaned_data.get(current_field)})
+            new_unit = unit_model(**unit_fields)    # save fields except work_author
+            new_unit.save()
+            new_unit.work_author.add(*new_work_authors)    # save work_author field; *.add since many-to-many
 
     else:
         if unit_type == 'article':
