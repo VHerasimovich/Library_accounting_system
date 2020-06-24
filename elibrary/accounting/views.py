@@ -273,6 +273,22 @@ def library_unit_add(request, unit_type):
             form = FictionBookInfo(request.POST)
         elif unit_type == 'science_book':
             form = ScienceBookInfo(request.POST)
+
+        if form.is_valid():
+            for current_field in form.fields:
+                # author name, surname parsing and storing
+                if current_field == 'author_name':
+                    name_string = form.cleaned_data.get('author_name').split(",")
+                    surname_string = form.cleaned_data.get('author_surname').split(",")
+                    i = 0
+                    for one_name in name_string:
+                        new_author = None
+                        new_author = Author(author_name=one_name, author_surname=surname_string[i])
+                        new_author.save()   # need to be reviewed! too many DB access
+                        i += 1
+
+
+
     else:
         if unit_type == 'article':
             form = ArticleInfo()
